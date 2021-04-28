@@ -1,0 +1,18 @@
+---
+  title: "Data Science Capstone: Text Prediction"
+author: "Candace Ng"
+date: "19/08/2020"
+output: ioslides_presentation
+---
+  
+  ```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE, fig.width=8, fig.height=3)
+```
+
+## Background
+
+```{r echo=FALSE}
+dataset <- read.csv("shopify.csv")
+large <- dataset[dataset$order_amount > 10000,]
+```
+
