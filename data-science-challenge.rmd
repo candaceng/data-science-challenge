@@ -24,13 +24,54 @@ dataset[dataset$order_amount > 10000,c("order_id", "shop_id", "user_id", "order_
 ```
 Looking at the results, we notice that the shops with shop_id 42 and 78 are the only shops that have orders greater than $1100. Customers who order from the shop with shop_id 42 typically order in large quantities, while the shop with shop_id 78 sells sneakers for $25725 a pair. These two outliers significantly increase the average order value across the 100 different shops and thus this method of calculating the AOV is an unreliable measure to use. 
 
+<br>
 b. The metric I would use to report for this dataset is the average order value on a per shop_id basis. In R, we can aggregate the mean order amount by shop_id with the following R command:
 ```{r}
 aggregate(dataset[,c("order_amount"),drop=FALSE], by=list(shop_id=dataset$shop_id), FUN=mean)
 ```
 
-c. From the results of the command in part b above, we see that most shops have an average order value in the $200-$400 range. If we aggregate by total_items instead of order_amount, we see that most customers order 1-2 pairs of shoes per order
+<br>
+c. From the results of the command in part b above, we see that most shops have an average order value in the $200-$400 range. If we aggregate by total_items instead of order_amount, we see that most customers order 1-2 pairs of shoes per order.
 ```{r}
 aggregate(dataset$total_items, by=list(shop_id=dataset$shop_id), FUN=mean)
 ```
 These are reasonable numbers which would not have been obvious if the AOV was calculated over all 100 shops.
+
+<hr>
+
+### Question 2
+
+<br>
+a. 
+```
+select count(orderid) 
+from orders o 
+inner join shippers s on s.shipperid = o.shipperid
+where s.shipperid = 1
+```
+Output: <b>54</b>
+
+<br>
+b. 
+```
+select top 1 productname
+from ((products p
+inner join orderdetails od on od.productid = p.productid)
+inner join orders o on o.orderid = od.orderid)
+inner join customers c on c.customerid = o.customerid
+where country = 'Germany'
+group by productname
+order by count(productname) desc
+```
+Output: <b>Gorgonzola Telino</b>
+
+<br>
+c. 
+```
+select top 1 e.lastname
+from (employees e 
+inner join orders o on e.employeeid = o.employeeid)
+group by e.lastname
+order by count(orderid) desc
+```
+Output: <b>Peacock</b>
